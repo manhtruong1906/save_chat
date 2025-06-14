@@ -12,6 +12,18 @@ const client = new MongoClient(uri);
 const dbName = "chatbot_db";
 const collectionName = "chat_history";
 
+function formatDate(date) {
+  const yyyy = date.getFullYear();
+  const mm = String(date.getMonth() + 1).padStart(2, '0'); // Tháng từ 0-11 nên +1
+  const dd = String(date.getDate()).padStart(2, '0');
+
+  const hh = String(date.getHours()).padStart(2, '0');
+  const min = String(date.getMinutes()).padStart(2, '0');
+  const ss = String(date.getSeconds()).padStart(2, '0');
+
+  return `${yyyy}-${mm}-${dd} ${hh}:${min}:${ss}`;
+}
+
 async function connectDB() {
   try {
     await client.connect();
@@ -25,10 +37,12 @@ async function connectDB() {
 app.post("/saveChat", async (req, res) => {
   try {
     const { chatHistory } = req.body;
-    const chatDocument = {
-      chatHistory: chatHistory,
-      timestamp: new Date(),
-      createdAt: new Date().toISOString(),
+    const formattedTime = formatDate(new Date());
+
+    chatDocument = {
+    chatHistory: chatHistory,
+    timestamp: formattedTime,
+    createdAt: formattedTime
     };
 
     const db = client.db(dbName);
