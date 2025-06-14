@@ -3,7 +3,15 @@ const fs = require("fs");
 const app = express();
 
 app.use(express.json());
+const { MongoClient } = require("mongodb"); 
 
+// MongoDB connection string 
+const uri = "mongodb+srv://truongdomanh:truongdomanh123!@test.mqvbxmg.mongodb.net/?retryWrites=true&w=majority&appName=test"; 
+const client = new MongoClient(uri); // 
+// Database và collection name 
+
+const dbName = "chatbot_db"; 
+const collectionName = "chat_history"; 
 async function connectDB() { 
     try { await client.connect(); console.log("Kết nối MongoDB thành công!"); 
 
